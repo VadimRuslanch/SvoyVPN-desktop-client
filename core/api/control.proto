@@ -1,0 +1,37 @@
+syntax = "proto3";
+package vadim.control.v1;
+option go_package = "github.com/you/vadim-decktop/core/api/control;control";
+
+message Empty {}
+
+message ImportRequest {
+  string raw_conf = 1; // wg-quick .conf текст
+  string name = 2;     // имя профиля
+}
+
+message ImportResponse { string profile_id = 1; }
+
+message ProfileId { string id = 1; }
+
+message StartRequest { string profile_id = 1; }
+message StopRequest  { string profile_id = 1; }
+
+message Status {
+  enum State { UNKNOWN=0; DISCONNECTED=1; CONNECTING=2; CONNECTED=3; ERROR=4; }
+  State state = 1;
+  uint64 rx_bytes = 2;
+  uint64 tx_bytes = 3;
+  string last_handshake = 4; // RFC3339
+  string public_ip = 5;      // после туннеля
+  string message = 6;        // ошибка/детали
+}
+
+message ListProfilesResponse { repeated string profile_ids = 1; }
+
+service VadimControl {
+  rpc ImportProfile(ImportRequest) returns (ImportResponse);
+  rpc ListProfiles(Empty) returns (ListProfilesResponse);
+  rpc StartTunnel(StartRequest) returns (Status);
+  rpc StopTunnel(StopRequest) returns (Status);
+  rpc GetStatus(ProfileId) returns (Status);
+}

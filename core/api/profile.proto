@@ -1,0 +1,24 @@
+syntax = "proto3";
+package vadim.profile.v1;
+option go_package = "github.com/you/vadim-decktop/core/api/profile;profile";
+
+message Interface {
+  string address = 1;     // 10.0.0.2/32
+  string dns = 2;         // 1.1.1.1 (через запятую — в UI)
+  uint32 mtu = 3;         // 1420
+}
+
+message Peer {
+  string public_key = 1;
+  string endpoint = 2;              // vpn.example.com:51820
+  string allowed_ips = 3;           // "0.0.0.0/0, ::/0"
+  uint32 persistent_keepalive = 4;  // 25
+}
+
+message Profile {
+  string id = 1;        // uuid
+  string name = 2;      // user-friendly
+  Interface iface = 3;
+  repeated Peer peers = 4;
+  bool killswitch = 5;  // UI-опция
+}

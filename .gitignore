@@ -1,0 +1,10 @@
+# Go
+core/bin/
+core/*/bin/
+core/**/*.pb.go
+core/**/proto.gen.go
+# Node
+ui/node_modules/
+ui/dist/
+# OS
+.DS_Store
